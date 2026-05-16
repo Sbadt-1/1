@@ -1,6 +1,6 @@
 local function s()
     repeat task.wait() until game:IsLoaded()
-
+//1
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
     local plr = game:GetService("Players").LocalPlayer
