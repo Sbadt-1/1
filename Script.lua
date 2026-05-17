@@ -122,8 +122,18 @@ local function s()
         if not humanoid then return false end
 
         humanoid:EquipTool(tool)
+        local waited = 0
+        while not isReady(slot) and waited < 0.5 do
+            task.wait()
+            waited = waited + 0.016
+        end
+        if not isReady(slot) then
+            humanoid:UnequipTools(1)
+            return false
+        end
+
         tool:Activate()
-        humanoid:UnequipTools()
+        humanoid:UnequipTools(1)
         lastUseTime[slot] = tick()
         return true
     end
@@ -272,6 +282,15 @@ local function s()
         })
     end)
 
+    pcall(function()
+        StuffTab:CreateButton({
+            Name = "Load Infinite Yield",
+            Callback = function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+            end,
+        })
+    end)
+
     local StatsLabel, BossLabel
     pcall(function()
         StatsLabel = StuffTab:CreateLabel("LV: -- | Reset: -- | Farm Time: 0m 00s", "rewind")
@@ -342,13 +361,21 @@ local function s()
     end)
 
     task.spawn(function()
-        while task.wait(8) do
-            if antiAFK and plr.Character then
-                local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    hrp.CFrame = hrp.CFrame * CFrame.new(0, 0.1, 0)
-                    task.wait(0.1)
-                    hrp.CFrame = hrp.CFrame * CFrame.new(0, -0.1, 0)
+        while task.wait(1) do
+            if antiAFK then
+                if getconnections then
+                    for _, connection in pairs(getconnections(plr.Idled)) do
+                        if connection.Disable then
+                            connection.Disable(connection)
+                        elseif connection.Disconnect then
+                            connection.Disconnect(connection)
+                        end
+                    end
+                else
+                    plr.Idled:Connect(function()
+                        game:GetService("VirtualUser"):CaptureController()
+                        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+                    end)
                 end
             end
         end
