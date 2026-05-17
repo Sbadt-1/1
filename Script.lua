@@ -250,7 +250,7 @@ local function s()
         })
     end
 
-    AutoFarmTab:CreateLabel("Attack Priority (örnek: 1,2,3,4,5,6,7,8)", "rewind")
+    AutoFarmTab:CreateLabel("Attack Priority ", "rewind")
     pcall(function()
         AutoFarmTab:CreateInput({
             Name = "Attack Priority",
@@ -266,7 +266,7 @@ local function s()
         })
     end)
 
-    AutoFarmTab:CreateLabel("Heal Priority (örnek: 4,5)", "rewind")
+    AutoFarmTab:CreateLabel("Heal Priority ", "rewind")
     pcall(function()
         AutoFarmTab:CreateInput({
             Name = "Heal Priority",
